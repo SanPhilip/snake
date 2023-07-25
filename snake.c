@@ -7,8 +7,7 @@
 
 int main() {
 
-    Snake* head = loadSnake();
-    Fruit fruit = loadFruit();
+    initGame();
 
     InitWindow(SCREENW,SCREENH,"Snake");
     SetTargetFPS(30);
@@ -22,17 +21,14 @@ int main() {
             drawFruit(fruit);
         EndDrawing();
 
-        if(IsKeyPressed(KEY_P)){
-            head -> len += 1;
-        }
-        if(CheckCollisionRecs(head -> rec,fruit.rec)){
-            fruit = loadFruit();
-            head -> len += 1;
-        }
-
-        isSnakeBigger(head);
+        isFruitEaten();
+        isSnakeBigger();
         checkDir();
         moveSnake();
+
+        if(IsKeyPressed(KEY_R)){
+            initGame();
+        }
     }
 
     CloseWindow();

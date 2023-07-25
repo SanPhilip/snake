@@ -26,7 +26,7 @@ Snake* snake[79*43];
 int bodyCount = 0;
 int prevSize = 0;
 
-Snake* loadSnake() {
+void loadSnake() {
     int x = (SCREENW - 10)/20*PIXEL_SIZE;
     int y = (SCREENH - 10)/20*PIXEL_SIZE;
 
@@ -35,9 +35,8 @@ Snake* loadSnake() {
                               .width = PIXEL_SIZE, .height = PIXEL_SIZE};
     head -> len = 0;
     head -> dir = 0;
-    snake[bodyCount] = head;
+    snake[0] = head;
     ++bodyCount;
-    return head;
 }
 
 void checkDir() {
@@ -72,16 +71,23 @@ typedef struct Fruit {
     Rectangle rec;
 } Fruit;
 
-Fruit loadFruit() {
+Fruit fruit;
+
+void loadFruit() {
     int x = randNum(1,78) * PIXEL_SIZE;
     int y = randNum(1,43) * PIXEL_SIZE;
 
-    Fruit fruit = {{x,y,PIXEL_SIZE,PIXEL_SIZE}};
-    return fruit;
+    fruit = (Fruit){.rec = {x,y,PIXEL_SIZE,PIXEL_SIZE}};
 }
 
+void isFruitEaten() {
+    if(CheckCollisionRecs(snake[0] -> rec,fruit.rec)){
+        loadFruit();
+        snake[0] -> len += 1;
+    }
+}
 
-void drawFruit(Fruit fruit) {
+void drawFruit() {
     DrawRectangleRec(fruit.rec,RED);
 }
 
@@ -100,9 +106,9 @@ void drawWalls() {
     DrawRectangle(SCREENW - PIXEL_SIZE,0,PIXEL_SIZE,SCREENH,BLACK);
 }
 
-void isSnakeBigger(Snake* head) {
-    if(head -> len > prevSize){
-        prevSize = head -> len;
+void isSnakeBigger() {
+    if(snake[0] -> len > prevSize){
+        prevSize = snake[0] -> len;
         Rectangle bodyPos = {0,0,PIXEL_SIZE,PIXEL_SIZE};
 
         Snake* body = (Snake*)malloc(sizeof(Snake));
@@ -111,4 +117,15 @@ void isSnakeBigger(Snake* head) {
         snake[bodyCount] = body;
         ++bodyCount;
     }
+}
+
+void initGame() {
+    for(int i = 0; i < bodyCount; i++){
+        free(snake[i]);
+    }
+
+    bodyCount = 0;
+    prevSize = 0;
+    loadSnake();
+    loadFruit();
 }
