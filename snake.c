@@ -5,24 +5,31 @@
 
 #include "snake.h"
 
-#define SCREENW 800
-#define SCREENH 450
-
 int main() {
 
-    Rectangle winFrame = {0,0,SCREENW,SCREENH};
+    Snake* head = loadSnake();
     Fruit fruit = loadFruit();
-    
+
     InitWindow(SCREENW,SCREENH,"Snake");
     SetTargetFPS(30);
     
     while(!WindowShouldClose()){
         BeginDrawing();
             ClearBackground(WHITE);
-            DrawRectangleLinesEx(winFrame,PIXEL_SIZE,BLACK);
+            drawWalls();
+            drawSnake();
             drawFruit(fruit);
-            fruit = loadFruit();
         EndDrawing();
+
+        checkDir(head);
+        moveSnake();
+
+        if(CheckCollisionRecs(head -> rec,fruit.rec)){
+            fruit = loadFruit();
+            head -> len += 1;
+        }
+
+        isSnakeBigger(head);
     }
 
     CloseWindow();
