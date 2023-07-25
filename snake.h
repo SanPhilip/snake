@@ -40,32 +40,31 @@ Snake* loadSnake() {
     return head;
 }
 
-void checkDir(Snake* snake) {
+void checkDir() {
     int key = GetKeyPressed();
-    switch(key) {
-        case UP: snake -> dir = UP;
-            break;
-        case RIGHT: snake -> dir = RIGHT;
-            break;
-        case DOWN: snake -> dir = DOWN;
-            break;
-        case LEFT: snake -> dir = LEFT;
-            break;
+    if(key == UP || key == RIGHT || key == DOWN || key == LEFT){
+        snake[0] -> dir = key;
     }
 }
 
 void moveSnake() {
-    for(int i = 0; i < bodyCount; i++){
-        switch(snake[i] -> dir) {
-        case UP: snake[i] -> rec.y -= PIXEL_SIZE;
-            break;
-        case RIGHT: snake[i] -> rec.x += PIXEL_SIZE;
-            break;
-        case DOWN: snake[i] -> rec.y += PIXEL_SIZE;
-            break;
-        case LEFT: snake[i] -> rec.x -= PIXEL_SIZE;
-            break;
-        }
+    Vector2 toMove = {snake[0] -> rec.x, snake[0] -> rec.y};
+    Vector2 prevPos;
+    for(int i = 1; i < bodyCount; i++){
+        prevPos = (Vector2){.x = snake[i] -> rec.x, .y = snake[i] -> rec.y};
+        snake[i] -> rec = (Rectangle){.x = toMove.x, .y = toMove.y,
+                                      .width = PIXEL_SIZE, .height = PIXEL_SIZE};
+        toMove = prevPos;
+    }
+    switch(snake[0] -> dir) {
+    case UP: snake[0] -> rec.y -= PIXEL_SIZE;
+        break;
+    case RIGHT: snake[0] -> rec.x += PIXEL_SIZE;
+        break;
+    case DOWN: snake[0] -> rec.y += PIXEL_SIZE;
+        break;
+    case LEFT: snake[0] -> rec.x -= PIXEL_SIZE;
+        break;
     }
 }
 
@@ -104,32 +103,10 @@ void drawWalls() {
 void isSnakeBigger(Snake* head) {
     if(head -> len > prevSize){
         prevSize = head -> len;
-        Snake tail = *snake[bodyCount-1];
-        Rectangle bodyPos;
-        switch(tail.dir){
-        case UP:
-            bodyPos.y = tail.rec.y + PIXEL_SIZE;
-            bodyPos.x = tail.rec.x;
-            break;
-        case RIGHT:
-            bodyPos.x = tail.rec.x - PIXEL_SIZE;
-            bodyPos.y = tail.rec.y;
-            break;
-        case DOWN:
-            bodyPos.y = tail.rec.y - PIXEL_SIZE;
-            bodyPos.x = tail.rec.x;
-            break;
-        case LEFT:
-            bodyPos.x = tail.rec.x + PIXEL_SIZE;
-            bodyPos.y = tail.rec.y;
-            break;
-        }
-
-        bodyPos.width = PIXEL_SIZE;
-        bodyPos.height = PIXEL_SIZE;
+        Rectangle bodyPos = {0,0,PIXEL_SIZE,PIXEL_SIZE};
 
         Snake* body = (Snake*)malloc(sizeof(Snake));
-        *body = (Snake){.rec = bodyPos, .len = 0, .dir = tail.dir};
+        *body = (Snake){.rec = bodyPos, .len = 0, .dir = 0};
 
         snake[bodyCount] = body;
         ++bodyCount;

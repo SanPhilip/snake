@@ -14,22 +14,25 @@ int main() {
     SetTargetFPS(30);
     
     while(!WindowShouldClose()){
+
         BeginDrawing();
             ClearBackground(WHITE);
-            drawWalls();
             drawSnake();
+            drawWalls();
             drawFruit(fruit);
         EndDrawing();
 
-        checkDir(head);
-        moveSnake();
-
+        if(IsKeyPressed(KEY_P)){
+            head -> len += 1;
+        }
         if(CheckCollisionRecs(head -> rec,fruit.rec)){
             fruit = loadFruit();
             head -> len += 1;
         }
 
         isSnakeBigger(head);
+        checkDir();
+        moveSnake();
     }
 
     CloseWindow();
