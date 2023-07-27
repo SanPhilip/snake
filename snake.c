@@ -100,6 +100,18 @@ void isFruitEaten(Snake* head, Fruit* fruit) {
     }
 }
 
+
+bool checkCollision(Snake head, Body* bodyPart[], int bodyCount) {
+
+    for(int i = 0; i < bodyCount; i++){
+        if(CheckCollisionRecs(head.rec,bodyPart[i]->rec)){
+            return true;
+        }
+    }
+    return false;
+}
+
+
 void initGame(Snake* head, int* prevSize, Fruit* fruit, Body* bodyPart[], int* bodyCount) {
 
     for(int i = 0; i < *bodyCount; i++){

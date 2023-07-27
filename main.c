@@ -4,6 +4,9 @@
 
 int main() {
 
+    bool isGameOver = false;
+    bool isGamePaused = false;
+
     Snake head;
     int prevSize = 0;
 
@@ -20,19 +23,35 @@ int main() {
     while(!WindowShouldClose()){
 
         BeginDrawing();
-            ClearBackground(GRAY);
-            drawSnake(head,bodyPart,bodyCount);
-            /* drawWalls(); */
-            drawFruit(fruit);
+        ClearBackground(GRAY);
+        drawSnake(head,bodyPart,bodyCount);
+        /* drawWalls(); */
+        drawFruit(fruit);
         EndDrawing();
 
-        isFruitEaten(&head,&fruit);
-        isSnakeBigger(head,&prevSize,bodyPart,&bodyCount);
-        checkDir(&head);
-        moveSnake(&head,bodyPart,bodyCount);
+        if(!isGameOver && !isGamePaused){
+            isFruitEaten(&head,&fruit);
+            isSnakeBigger(head,&prevSize,bodyPart,&bodyCount);
+            checkDir(&head);
+            moveSnake(&head,bodyPart,bodyCount);
+        }
+
+        if(checkCollision(head,bodyPart,bodyCount)){
+            isGameOver = true;
+        }
+
+        if(IsKeyPressed(KEY_P)){
+            if(isGamePaused){
+                isGamePaused = false;
+            } else {
+                isGamePaused = true;
+            }
+        }
 
         if(IsKeyPressed(KEY_R)){
             initGame(&head,&prevSize,&fruit,bodyPart,&bodyCount);
+            isGameOver = false;
+            isGamePaused = false;
         }
     }
 

@@ -36,6 +36,8 @@ void loadFruit(Fruit* fruit);
 void drawFruit(Fruit fruit);
 void isFruitEaten(Snake* head, Fruit* fruit);
 
+bool checkCollision(Snake head, Body* bodyPart[], int bodyCount);
+
 void initGame(Snake* head, int* prevSize, Fruit* fruit, Body* bodyPart[], int* bodyCount);
 
 #endif
