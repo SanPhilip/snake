@@ -16,8 +16,8 @@ int randNum(int min, int max) {
 
 void loadSnake(Snake* head) {
 
-    int x = (BOARDW - PIXEL_SIZE)/20*PIXEL_SIZE;
-    int y = (BOARDH - PIXEL_SIZE)/20*PIXEL_SIZE;
+    int x = BOARDW/2;
+    int y = BOARDH/2;
 
     head->rec = (Rectangle){.x = x, .y = y,
                             .width = PIXEL_SIZE,
@@ -65,6 +65,8 @@ void moveSnake(Snake* head, Body* bodyPart[], int bodyCount) {
     case KEY_LEFT: head->rec.x -= PIXEL_SIZE;
         break;
     }
+
+    checkOutOfBounds(head);
 }
 
 void isSnakeBigger(Snake head, int* prevSize, Body* bodyPart[], int* bodyCount) {
@@ -83,8 +85,8 @@ void isSnakeBigger(Snake head, int* prevSize, Body* bodyPart[], int* bodyCount) 
 
 void loadFruit(Fruit* fruit) {
 
-    int x = randNum(1,79) * PIXEL_SIZE;
-    int y = randNum(1,43) * PIXEL_SIZE;
+    int x = randNum(0,BOARDW/PIXEL_SIZE - 1) * PIXEL_SIZE;
+    int y = randNum(0,BOARDH/PIXEL_SIZE - 1) * PIXEL_SIZE;
     *fruit = (Fruit){.rec = {x,y,PIXEL_SIZE,PIXEL_SIZE}};
 }
 
@@ -109,6 +111,19 @@ bool checkCollision(Snake head, Body* bodyPart[], int bodyCount) {
         }
     }
     return false;
+}
+
+void checkOutOfBounds(Snake* head) {
+
+    if(head->rec.x < 0){
+        head->rec.x = BOARDW - PIXEL_SIZE;
+    } else if(head->rec.y < 0){
+        head->rec.y = BOARDH - PIXEL_SIZE;
+    } else if(head->rec.x > BOARDW - 1){
+        head->rec.x = 0;
+    } else if(head->rec.y > BOARDH - 1){
+        head->rec.y = 0;
+    }
 }
 
 

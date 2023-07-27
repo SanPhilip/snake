@@ -5,7 +5,7 @@
 
 #define BOARDW 810
 #define BOARDH 450
-#define PIXEL_SIZE 10
+#define PIXEL_SIZE 15
 
 typedef struct Snake {
     Rectangle rec;
@@ -37,6 +37,7 @@ void drawFruit(Fruit fruit);
 void isFruitEaten(Snake* head, Fruit* fruit);
 
 bool checkCollision(Snake head, Body* bodyPart[], int bodyCount);
+void checkOutOfBounds(Snake* head);
 
 void initGame(Snake* head, int* prevSize, Fruit* fruit, Body* bodyPart[], int* bodyCount);
 

@@ -10,7 +10,7 @@ int main() {
     Snake head;
     int prevSize = 0;
 
-    Body* bodyPart[79*43];
+    Body* bodyPart[54*30];
     int bodyCount = 0;
 
     Fruit fruit;
@@ -23,10 +23,9 @@ int main() {
     while(!WindowShouldClose()){
 
         BeginDrawing();
-        ClearBackground(GRAY);
-        drawSnake(head,bodyPart,bodyCount);
-        /* drawWalls(); */
-        drawFruit(fruit);
+            ClearBackground(GRAY);
+            drawSnake(head,bodyPart,bodyCount);
+            drawFruit(fruit);
         EndDrawing();
 
         if(!isGameOver && !isGamePaused){
