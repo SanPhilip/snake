@@ -26,7 +26,7 @@ void testLib();
 
 int randNum(int min, int max);
 
-void loadSnake(Snake* head);
+void loadSnake(Snake* head, int* prevSize, Body* bodyPart[], int* bodyCount);
 void drawSnake(Snake head, Body* bodyPart[], int bodyCount);
 void checkDir(Snake* head);
 void moveSnake(Snake* head, Body* bodyPart[], int bodyCount);

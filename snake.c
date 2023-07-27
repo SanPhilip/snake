@@ -14,7 +14,7 @@ int randNum(int min, int max) {
 }
 
 
-void loadSnake(Snake* head) {
+void loadSnake(Snake* head, int* prevSize, Body* bodyPart[], int* bodyCount) {
 
     int x = BOARDW/2;
     int y = BOARDH/2;
@@ -22,8 +22,12 @@ void loadSnake(Snake* head) {
     head->rec = (Rectangle){.x = x, .y = y,
                             .width = PIXEL_SIZE,
                             .height = PIXEL_SIZE};
-    head->len = 0;
+    head->len = 3;
     head->dir = 0;
+
+    for(int i = 0; i < head->len; i++){
+        isSnakeBigger(*head,prevSize,bodyPart,bodyCount);
+    }
 }
 
 void drawSnake(Snake head, Body* bodyPart[], int bodyCount) {
@@ -38,7 +42,12 @@ void checkDir(Snake* head) {
 
     int key = GetKeyPressed();
     if(key == KEY_UP || key == KEY_RIGHT || key == KEY_DOWN || key == KEY_LEFT){
-        head->dir = key;
+        /* if((head->dir == KEY_UP && key != KEY_DOWN)    || */
+        /*    (head->dir == KEY_DOWN && key != KEY_UP)    || */
+        /*    (head->dir == KEY_LEFT && key != KEY_RIGHT) || */
+        /*    (head->dir == KEY_RIGHT && key != KEY_LEFT)){ */
+            head->dir = key;
+        /* } */
     }
 }
 
@@ -72,10 +81,10 @@ void moveSnake(Snake* head, Body* bodyPart[], int bodyCount) {
 void isSnakeBigger(Snake head, int* prevSize, Body* bodyPart[], int* bodyCount) {
 
     if(head.len > *prevSize){
-        *prevSize = head.len;
+        ++(*prevSize);
 
         Body* body = (Body*)malloc(sizeof(Body));
-        *body = (Body){{0,0,PIXEL_SIZE,PIXEL_SIZE}};
+        *body = (Body){{BOARDW+30,BOARDH+30,PIXEL_SIZE,PIXEL_SIZE}};
 
         bodyPart[*bodyCount] = body;
         ++(*bodyCount);
@@ -105,9 +114,11 @@ void isFruitEaten(Snake* head, Fruit* fruit) {
 
 bool checkCollision(Snake head, Body* bodyPart[], int bodyCount) {
 
-    for(int i = 0; i < bodyCount; i++){
-        if(CheckCollisionRecs(head.rec,bodyPart[i]->rec)){
-            return true;
+    if(head.dir != 0){
+        for(int i = 0; i < bodyCount; i++){
+            if(CheckCollisionRecs(head.rec,bodyPart[i]->rec)){
+                return true;
+            }
         }
     }
     return false;
@@ -135,6 +146,6 @@ void initGame(Snake* head, int* prevSize, Fruit* fruit, Body* bodyPart[], int* b
 
     *bodyCount = 0;
     *prevSize = 0;
-    loadSnake(head);
+    loadSnake(head,prevSize,bodyPart,bodyCount);
     loadFruit(fruit);
 }
