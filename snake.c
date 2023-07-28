@@ -41,13 +41,13 @@ void drawSnake(Snake head, Body* bodyPart[], int bodyCount) {
 void checkDir(Snake* head) {
 
     int key = GetKeyPressed();
+    int prevDir = head->dir;
+
     if(key == KEY_UP || key == KEY_RIGHT || key == KEY_DOWN || key == KEY_LEFT){
-        /* if((head->dir == KEY_UP && key != KEY_DOWN)    || */
-        /*    (head->dir == KEY_DOWN && key != KEY_UP)    || */
-        /*    (head->dir == KEY_LEFT && key != KEY_RIGHT) || */
-        /*    (head->dir == KEY_RIGHT && key != KEY_LEFT)){ */
-            head->dir = key;
-        /* } */
+        head->dir = key;
+        if(!isInputValid(prevDir,key) && prevDir != 0){
+            head->dir = prevDir;
+        }
     }
 }
 
@@ -63,7 +63,7 @@ void moveSnake(Snake* head, Body* bodyPart[], int bodyCount) {
         bodyPart[i]->rec.y = toMove.y;
         toMove = prevPos;
     }
-    
+
     switch(head->dir) {
     case KEY_UP: head->rec.y -= PIXEL_SIZE;
         break;
@@ -135,6 +135,17 @@ void checkOutOfBounds(Snake* head) {
     } else if(head->rec.y > BOARDH - 1){
         head->rec.y = 0;
     }
+}
+
+bool isInputValid(int dir, int key) {
+
+    if((dir == KEY_UP && key != KEY_DOWN)    ||
+       (dir == KEY_DOWN && key != KEY_UP)    ||
+       (dir == KEY_LEFT && key != KEY_RIGHT) ||
+       (dir == KEY_RIGHT && key != KEY_LEFT)){
+        return true;
+    }
+    return false;
 }
 
 

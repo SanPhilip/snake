@@ -33,10 +33,11 @@ int main() {
             isSnakeBigger(head,&prevSize,bodyPart,&bodyCount);
             checkDir(&head);
             moveSnake(&head,bodyPart,bodyCount);
-        }
 
-        if(checkCollision(head,bodyPart,bodyCount)){
-            isGameOver = true;
+
+            if(checkCollision(head,bodyPart,bodyCount)){
+                isGameOver = true;
+            }
         }
 
         if(IsKeyPressed(KEY_P)){

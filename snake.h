@@ -38,7 +38,7 @@ void isFruitEaten(Snake* head, Fruit* fruit);
 
 bool checkCollision(Snake head, Body* bodyPart[], int bodyCount);
 void checkOutOfBounds(Snake* head);
+bool isInputValid(int dir, int key);
 
 void initGame(Snake* head, int* prevSize, Fruit* fruit, Body* bodyPart[], int* bodyCount);
-
 #endif
